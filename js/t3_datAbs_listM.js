@@ -181,6 +181,7 @@ function IndexOf(array,elem)
 function LastIndexOf(array,elem)
 /*Funcion que muestra por pantalla el indice de la ultima aparicion de un elemento en la lista*/
 {
+  elem = parseInt(elem);
   if(isNumber(elem)){
     return array.lastIndexOf(elem);
   }else{
@@ -229,8 +230,9 @@ function LastElement(array)
 function RemoveElement(array,element)
 /*Funcion que elimina un elemento en la lista. devuelve true o false, si se pudo eliminar. Devuelve un error si elemento a borrar no es un numero*/
 {
-  var index = array.indexOf(element);
+  element = parseInt(element);
   if(isNumber(element) ){
+    var index = array.indexOf(element);
     if((index != -1)){
       Remove(array,index);
       return true;
@@ -296,19 +298,20 @@ function test()
   console.log("Insertar un elemento dentro de la lista(addAt): " + addAt(list,8,2));
   console.log("Elementos en la lista(ToString(list)): " + ToString(list));
   console.log("Indice del elemento 3 (IndexOf(list,4)): " + IndexOf(list,4));
-  //console.log("Indice del elemento 8 (LastIndexOf): " + LastIndexOf(list,8));
-  //console.log("Capacidad de la lista(capacity): "+ Capacity(list));
-  //console.log("Primer elemento a de la lista (FirstElement): " + FirstElement(list));
-  //console.log("Primer elemento a de la lista (LastElement): " + LastElement(list));
-  //console.log("Eliminamos un elemento de la lista: " + RemoveElement(list,8) );
-  //console.log("Eliminamos un elemento de la lista: " + RemoveElement(list,8) );
-  //console.log("Elementos en la lista(ToString), con la lista casi llena: " + ToString(list));
-  //console.log("Vaciamos la lista (Clear): " + clear(list));
-  //console.log("Llenamos la lista de valores aleatorios sin pasar limite por parametro (FillRandom): " + FillRandom(list));
-  //console.log("Mostramos los valores de la lista en una cadena: " + ToString(list));
-  //console.log("Vaciamos la lista: " + clear(list));
-  //console.log("Llenamos la lista de valores aleatorios pasando un limite por parametro (FillRandom): " + FillRandom(list,100));
-  //console.log("Mostramos los valores de la lista en una cadena: " + ToString(list));
+  console.log("Indice del elemento 8 (LastIndexOf(list,8)): " + LastIndexOf(list,8));
+  console.log("Capacidad de la lista(capacity(list)): "+ Capacity(list));
+  console.log("Primer elemento a de la lista (FirstElement(list)): " + FirstElement(list));
+  console.log("Primer elemento a de la lista (LastElement(list)): " + LastElement(list));
+  console.log("Eliminamos un elemento de la lista RemoveElement(list,8): " + RemoveElement(list,8) );
+  console.log("Elementos en la lista despues de un Remove Element): " + ToString(list));
+  console.log("Eliminamos el mismo elemento de la lista RemoveElement(list,8): " + RemoveElement(list,8) );
+  console.log("Elementos en la lista despues de un segundo RemoveElement): " + ToString(list));
+  console.log("Vaciamos la lista (Clear): " + clear(list));
+  console.log("Llenamos la lista de valores aleatorios sin pasar limite por parametro (FillRandom(list)): " + FillRandom(list));
+  console.log("Mostramos los valores de la lista en una cadena: " + ToString(list));
+  console.log("Vaciamos la lista: " + clear(list));
+  console.log("Llenamos la lista de valores aleatorios pasando un limite por parametro (FillRandom,limit): " + FillRandom(list,100));
+  console.log("Mostramos los valores de la lista en una cadena: " + ToString(list));
 
   
 }
@@ -322,4 +325,4 @@ function Reset()
   list = new Array();
 }
 
-//Reset();
+Reset();

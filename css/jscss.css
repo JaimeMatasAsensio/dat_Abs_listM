@@ -124,7 +124,7 @@ input, button{
 }
 .btn >*{
 	display: table-cell;
-	width: 49%;
+	width: 48%;
 }
 button{
 	height: 30px;
