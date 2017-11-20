@@ -26,6 +26,20 @@ function CreateList(length)
 
 }
 
+function place(array)
+/*Funcion que situa todos los elementos NaN al final de la lista*/
+{
+  var i = 0;
+  while(i < listLength){
+    if(isNaN(array[i]) && !isNaN(array[i+1])){
+      var aux = array[i];
+      array[i] = array[i+1];
+      array[i+1] = aux;
+    }
+      i++;
+  }
+}
+
 function isNumber(num)
 /*Funcion para comprobar si un dato es un numero finito y entero. Si no devuelve un error.*/
 {
@@ -85,17 +99,11 @@ function size(array)
 function add(array,element)
 /*Funcion que añade un elemento al final de la lista. Devuelve el tamaño de la lista*/
 {
-  if(!isFull(array) && isNumber(element)){
-    var added = false;
-    var i = 0;
-    while(!added && i < listLength){
-      if(isNaN(array[i])){
-        array[i] = element;
-        added = true;  
-      }
-      i++;
-    }
+  if(!isFull(array) && isNumber(element) && (size(array)<= listLength-1)){
+    
+    array.splice((size(array)),1,element)
     return size(array);
+    
   }else{
     throw "Array is full or element isn`t a number.";
   }
@@ -105,16 +113,13 @@ function add(array,element)
 function addAt(array,element,index)
 /*Funcion que añade un elemento en la posicion indicada de la lista. Devuelve el tamaño de la lista*/
 {
+
   if(indexIn(index) && isNumber(element) && !isFull(array)){
-    var i = index;
-    var aux = array[i];
-    array[i] = element;
-    while(i < listLength-1){
-      var aux1 = array[i+1];
-      array[i+1] = aux;
-      aux = aux1;
-      i++;
-    }
+    
+    array.splice(index,1,element);
+
+    place(array);
+
     return size(array);
   }else{
     throw "Index out of the range, element isn`t a number or list is full."
@@ -136,15 +141,13 @@ function Remove(array,index)
 libre al final de la misma*/
 {
   if(indexIn(index) && !isEmpty(list)){
-    var element = array[index];
-    while(!isNaN(array[index + 1]) && index < listLength-1){
-      var aux = array[index];
-      array[index] = array[index + 1];
-      array[index + 1] = aux;
-      index++;
-    }
-    array[index] = NaN;
-    return element;
+
+    array.splice(index,1,Number.NaN);
+
+    place(array);
+    
+    return size(array);
+
   }else{
     throw "Index out of list range or empty list.";
   }
@@ -165,19 +168,12 @@ function ToString(array)
 function IndexOf(array,elem)
 /*Funcion que muestra el indice de la aparicion de un elemento en la lista*/
 {
-  var index = -1;
   if(isNumber(elem)){
-    var find = false;
-    var i = 0;
-    while(!find && i < listLength){
-      if(array[i] === elem){
-        find = true;
-        index = i;
-      }else{
-        i++;
-      }
-    }
-    return index;
+
+    elem = parseInt(elem);
+    
+    return array.indexOf(elem);
+
   }else{
     throw "Element isn`t a number."      
   }
@@ -185,19 +181,8 @@ function IndexOf(array,elem)
 function LastIndexOf(array,elem)
 /*Funcion que muestra por pantalla el indice de la ultima aparicion de un elemento en la lista*/
 {
-  var index = -1;
   if(isNumber(elem)){
-    var find = false;
-    var i = listLength-1;
-    while(!find && i >= 0){
-      if(array[i] === elem){
-        find = true;
-        index = i;
-      }else{
-        i--;
-      }
-    }
-    return index;
+    return array.lastIndexOf(elem);
   }else{
     throw "Element isn`t a number."
   }  
@@ -244,15 +229,18 @@ function LastElement(array)
 function RemoveElement(array,element)
 /*Funcion que elimina un elemento en la lista. devuelve true o false, si se pudo eliminar. Devuelve un error si elemento a borrar no es un numero*/
 {
-  if(isNumber(element)){
-    var removed = (IndexOf(array,element) != -1)? true : false;
-    if(removed){
-      Remove(array,IndexOf(array,element));
+  var index = array.indexOf(element);
+  if(isNumber(element) ){
+    if((index != -1)){
+      Remove(array,index);
+      return true;
+    }else{
+      return false;
     }
-    return removed;
-    
+
   }else{
-    throw "Element isn`t a number."
+    
+    throw "Element isn`t a number"
   }
 }
 
@@ -289,47 +277,38 @@ function test()
   console.log("Tamaño de la lista: " + add(list,1));
   console.log(list[4]);
 
-  console.log("Obtener un elemento dentro de la lista(get): " + get(list,3));
+  console.log("Obtener un elemento dentro de la lista(get(list,3): " + get(list,3));
+
   try{
-  console.log("Obtener un elemento fuera de la lista(get): " + get(list,11));
+    get(list,11);
   }catch(error){
-    console.log("Error: " + error);
+    console.log("Obtener un elemento furea de la lista(get(list,11)): " + error);
   }
 
-  console.log("Extraer un elemento dentro de la lista(remove): " + Remove(list,3));
+  console.log("Extraer un elemento dentro de la lista(remove(list,3)): " + Remove(list,3));
   
   try{
-  console.log("Extraer un elemento fuera de la lista(remove): " + Remove(list,11));
+  console.log( Remove(list,11));
   }catch(error){
-    console.log("Error: " + error);
+  console.log("Extraer un elemento fuera de la lista(remove): " + error);
   }
 
   console.log("Insertar un elemento dentro de la lista(addAt): " + addAt(list,8,2));
-  console.log("Elementos en la lista(ToString): " + ToString(list));
-  console.log("Indice del elemento 3 (IndexOf): " + IndexOf(list,3));
-  console.log("Indice del elemento 8 (LastIndexOf): " + LastIndexOf(list,8));
-  console.log("Capacidad de la lista(capacity): "+ Capacity(list));
-  console.log("Primer elemento a de la lista (FirstElement): " + FirstElement(list));
-
-  console.log("Primer elemento a de la lista (LastElement): " + LastElement(list));
-
-  console.log("Eliminamos un elemento de la lista: " + RemoveElement(list,8) );
-
-  console.log("Eliminamos un elemento de la lista: " + RemoveElement(list,8) );
-
-  console.log("Elementos en la lista(ToString), con la lista casi llena: " + ToString(list));
-
-  console.log("Vaciamos la lista (Clear): " + clear(list));
-
-  console.log("Llenamos la lista de valores aleatorios sin pasar limite por parametro (FillRandom): " + FillRandom(list));
-
-  console.log("Mostramos los valores de la lista en una cadena: " + ToString(list));
-
-  console.log("Vaciamos la lista: " + clear(list));
-
-  console.log("Llenamos la lista de valores aleatorios pasando un limite por parametro (FillRandom): " + FillRandom(list,100));
-
-  console.log("Mostramos los valores de la lista en una cadena: " + ToString(list));
+  console.log("Elementos en la lista(ToString(list)): " + ToString(list));
+  console.log("Indice del elemento 3 (IndexOf(list,4)): " + IndexOf(list,4));
+  //console.log("Indice del elemento 8 (LastIndexOf): " + LastIndexOf(list,8));
+  //console.log("Capacidad de la lista(capacity): "+ Capacity(list));
+  //console.log("Primer elemento a de la lista (FirstElement): " + FirstElement(list));
+  //console.log("Primer elemento a de la lista (LastElement): " + LastElement(list));
+  //console.log("Eliminamos un elemento de la lista: " + RemoveElement(list,8) );
+  //console.log("Eliminamos un elemento de la lista: " + RemoveElement(list,8) );
+  //console.log("Elementos en la lista(ToString), con la lista casi llena: " + ToString(list));
+  //console.log("Vaciamos la lista (Clear): " + clear(list));
+  //console.log("Llenamos la lista de valores aleatorios sin pasar limite por parametro (FillRandom): " + FillRandom(list));
+  //console.log("Mostramos los valores de la lista en una cadena: " + ToString(list));
+  //console.log("Vaciamos la lista: " + clear(list));
+  //console.log("Llenamos la lista de valores aleatorios pasando un limite por parametro (FillRandom): " + FillRandom(list,100));
+  //console.log("Mostramos los valores de la lista en una cadena: " + ToString(list));
 
   
 }
@@ -343,4 +322,4 @@ function Reset()
   list = new Array();
 }
 
-Reset();
+//Reset();
